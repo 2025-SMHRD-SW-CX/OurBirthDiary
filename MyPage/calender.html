@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <title>일정 캘린더</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" />
+    <link rel="stylesheet" href="../CSS/stylesCalender.css" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+</head>
+
+<body>
+    <!-- FullCalendar 전체 -->
+    <div class="calendar-wrapper">
+        <div id="calendar"></div>
+    </div>
+
+    <!-- 플로팅 일정 등록 폼 (우상단에 작게 표시) -->
+    <div id="inline-form" class="popup-form hidden">
+        <h3 id="form-title">일정 등록</h3>
+        <input type="text" id="event-title" placeholder="제목" />
+        <input type="date" id="event-start" />
+        <input type="date" id="event-end" />
+        <input type="text" id="event-color" placeholder="예: 빨강, 파랑, #ffaa00" />
+        <div class="form-buttons">
+            <button id="save-event">등록</button>
+            <button id="delete-event" class="delete hidden">삭제</button>
+            <button id="cancel-event">취소</button>
+        </div>
+    </div>
+
+    <!-- 우하단 버튼 -->
+    <button id="toggle-form" class="floating-button">＋ 일정 등록하기</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const colorMap = {
+                빨강: '#ff4d4d', 파랑: '#4da6ff', 초록: '#28a745', 노랑: '#ffd633',
+                보라: '#9b59b6', 주황: '#ff884d', 회색: '#95a5a6',
+                검정: '#333333', 흰색: '#ffffff', 핑크: '#ff69b4'
+            };
+
+            function getColor(name) {
+                return colorMap[name.trim()] || name;
+            }
+
+            const formEl = document.getElementById('inline-form');
+            const toggleBtn = document.getElementById('toggle-form');
+
+            const titleInput = document.getElementById('event-title');
+            const startInput = document.getElementById('event-start');
+            const endInput = document.getElementById('event-end');
+            const colorInput = document.getElementById('event-color');
+            const saveBtn = document.getElementById('save-event');
+            const deleteBtn = document.getElementById('delete-event');
+            const cancelBtn = document.getElementById('cancel-event');
+            const formTitle = document.getElementById('form-title');
+
+            let selectedEvent = null;
+
+            const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+                initialView: 'dayGridMonth',
+                editable: true,
+                selectable: true,
+                headerToolbar: {
+                    start: 'prev,next today',
+                    center: 'title',
+                    end: ''
+                },
+                titleFormat: { year: 'numeric', month: '2-digit' },
+                events: [],
+
+                eventClick: function (info) {
+                    selectedEvent = info.event;
+                    titleInput.value = selectedEvent.title;
+                    startInput.value = selectedEvent.startStr.slice(0, 10);
+                    const end = new Date(selectedEvent.endStr);
+                    end.setDate(end.getDate() - 1);
+                    endInput.value = end.toISOString().slice(0, 10);
+                    colorInput.value = selectedEvent.backgroundColor;
+                    deleteBtn.classList.remove('hidden');
+                    formTitle.textContent = '일정 수정';
+                    formEl.classList.remove('hidden');
+                }
+            });
+
+            calendar.render();
+
+            toggleBtn.onclick = () => {
+                selectedEvent = null;
+                titleInput.value = '';
+                startInput.value = '';
+                endInput.value = '';
+                colorInput.value = '';
+                deleteBtn.classList.add('hidden');
+                formTitle.textContent = '일정 등록';
+                formEl.classList.toggle('hidden');
+            };
+
+            cancelBtn.onclick = () => {
+                formEl.classList.add('hidden');
+            };
+
+            saveBtn.onclick = () => {
+                const title = titleInput.value.trim();
+                const start = startInput.value;
+                const end = endInput.value;
+                const color = getColor(colorInput.value);
+
+                if (!title || !start || !end) {
+                    alert("모든 항목을 입력하세요.");
+                    return;
+                }
+
+                const adjustedEnd = new Date(end);
+                adjustedEnd.setDate(adjustedEnd.getDate() + 1);
+                const finalEnd = adjustedEnd.toISOString().slice(0, 10);
+
+                if (selectedEvent) {
+                    selectedEvent.setProp('title', title);
+                    selectedEvent.setStart(start);
+                    selectedEvent.setEnd(finalEnd);
+                    selectedEvent.setProp('backgroundColor', color);
+                } else {
+                    calendar.addEvent({
+                        title,
+                        start,
+                        end: finalEnd,
+                        color,
+                        allDay: true
+                    });
+                }
+
+                formEl.classList.add('hidden');
+            };
+
+            deleteBtn.onclick = () => {
+                if (selectedEvent && confirm('정말 삭제하시겠습니까?')) {
+                    selectedEvent.remove();
+                    formEl.classList.add('hidden');
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>
