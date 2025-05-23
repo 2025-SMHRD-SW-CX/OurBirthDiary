@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리들의 출생일기</title>
+    <link rel="stylesheet" href="./CSS/stylesmain.css">
+</head>
+<body>
+    <div class="header">1</div>
+    <div class="header-space"></div>
+    <div class="structure">
+        <div class="main">
+            <div class="container">
+                안녕하세요
+            </div>
+        </div>
+        <div class="sidebar">
+            <button class="toggle-sidebar" aria-label="사이드바 열기/닫기">✕</button>
+            <div class="container">
+                   <!-- 닫기 버튼 -->
+  
+
+  <!-- 인기 게시글 섹션 -->
+  <div class="sidebar-section popular">
+    <div class="section-header">
+    <span class="title">인기 게시글</span>
+    <div class="tabs">
+      <button class="active" data-period="daily">일간</button>
+      <button data-period="weekly">주간</button>
+      <button data-period="monthly">월간</button>
+    </div>
+  </div>
+    <div class="items">
+         <div class="item-list active" data-period="daily">
+    <div class="item-card">
+      <div class="item-content">
+        <span class="rank">1.</span>
+        <span class="tag">정책</span>
+        <p>한부모 가족 지원 정책 한부모 가족 지원 정책 변화를 중심으로 간략히 설명했...</p>
+      </div>
+    </div>
+    <!-- 추가일간리스트 -->
+  </div>
+
+        <div class="item-list" data-period="weekly">
+      <!-- 주간 리스트 -->
+      <div class="item-card">…주간 1위 게시글…</div>
+      <div class="item-card">…주간 2위 게시글…</div>
+      <!-- … -->
+    </div>
+     <div class="item-list" data-period="monthly">
+      <!-- 월간 리스트 -->
+      <div class="item-card">…월간 1위 게시글…</div>
+      <div class="item-card">…월간 2위 게시글…</div>
+      <!-- … -->
+    </div>
+               
+        </div>
+      </div>
+   
+
+
+  <!-- 스크랩 섹션 -->
+  <div class="sidebar-section scrap">
+    <div class="section-header">
+      <span class="title">스크랩</span>
+    </div>
+    <div class="items">
+      <!-- 반복 예시 4개 -->
+      <div class="item-card">
+        <div class="item-content">
+          <span class="tag">정책</span>
+          <p>한부모 가족 지원 정책 한부모 가족 지원 정책 변화를 중심으로 간략히 설명했...</p>
+          
+        </div>
+      </div>
+      <div class="item-card">
+        <div class="item-content">
+          <span class="tag">정책</span>
+          <p>한부모 가족 지원 정책 한부모 가족 지원 정책 변화를 중심으로 간략히 설명했...</p>
+        </div>
+      </div>
+      <div class="item-card">
+        <div class="item-content">
+          <span class="tag">정책</span>
+          <p>한부모 가족 지원 정책 한부모 가족 지원 정책 변화를 중심으로 간략히 설명했...</p>
+        </div>
+      </div>
+      <div class="item-card">
+        <div class="item-content">
+          <span class="tag">정책</span>
+          <p>한부모 가족 지원 정책 한부모 가족 지원 정책 변화를 중심으로 간략히 설명했...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+            </div>
+
+        </div>
+        <div class="line">5</div>
+    </div>
+    <div class="footer">4</div>
+    
+    <script>
+    document.querySelector(".sidebar").style.height=getComputedStyle(document.querySelector(".main>.container")).height;
+          // 1) 요소 캐시
+  const tabButtons = document.querySelectorAll('.popular .tabs button');
+  const lists      = document.querySelectorAll('.popular .item-list');
+  const dailyList  = document.querySelector('.popular .item-list[data-period="daily"]');
+
+  // 2) 페이지 로드 시 일간 콘텐츠 백업
+  let dailyContent = dailyList.innerHTML;
+
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const period = btn.dataset.period;
+
+      // 탭 active 토글
+      tabButtons.forEach(b =>
+        b.classList.toggle('active', b === btn)
+      );
+
+      // 리스트 보이기/숨기기
+      lists.forEach(list => {
+         list.classList.toggle('active', list.dataset.period === period);
+    });
+
+      // daily 탭일 때는 복원, 아니면 내용 삭제
+      if (period === 'daily') {
+      dailyList.innerHTML = dailyContent;
+    } else {
+      dailyList.innerHTML = '';
+    }
+  });
+});
+
+// 버튼 토글 
+  const toggleBtn        = document.querySelector('.toggle-sidebar');
+  const sidebarContainer = document.querySelector('.sidebar .container');
+
+  toggleBtn.addEventListener('click', () => {
+    // 1) 사이드바 토글 (collapsed 클래스 추가/제거)
+    sidebarContainer.classList.toggle('collapsed');
+
+    // 2) 버튼 아이콘 토글
+    if (sidebarContainer.classList.contains('collapsed')) {
+      toggleBtn.textContent = '+';
+    } else {
+      toggleBtn.textContent = '✕';
+    }
+  });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원 유형 선택</title>
+    <link rel="stylesheet" href="../CSS/stylesJoin.css">
+</head>
+
+<body>
+
+    <div class="heading-box">
+        <h3>회원 유형에 따라 가입 절차가 달라집니다.</h3>
+    </div>
+
+    <form class="container">
+        <label class="card">
+            <input type="radio" name="userType" value="NM">
+            <img src="../data/svg/일반인.png" alt="일반회원 아이콘">
+            <div class="label">일반회원</div>
+        </label>
+
+        <label class="card">
+            <input type="radio" name="userType" value="SD">
+            <img src="../data/svg/미혼부.png" alt="미혼부 아이콘">
+            <div class="label">미혼부</div>
+        </label>
+
+        <label class="card">
+            <input type="radio" name="userType" value="LE">
+            <img src="../data/svg/변호사.png" alt="법률전문가 아이콘">
+            <div class="label">법률전문가</div>
+        </label>
+
+        <div class="button-wrapper">
+            <button type="button" class="next-button" onclick="goToSelectedPage()">다음</button>  
+        </div>
+
+    <script>
+        function goToSelectedPage() {
+            const selected = document.querySelector('input[name="userType"]:checked');
+            if (selected) {
+                window.location.href = selected.value;
+            } else {
+                alert("회원 유형을 선택해주세요.");
+            }
+        }
+    </script>
+
+</body>
+
+</html>
